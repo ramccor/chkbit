@@ -80,7 +80,7 @@ type CLI struct {
 		Paths        []string `arg:"" name:"paths" help:"directories to update"`
 		SkipExisting bool     `short:"s" help:"only add new and modified files, do not check existing (quicker)"`
 		Force        bool     `help:"force update of damaged items (advanced usage only)"`
-		NoDelete     bool     `help:"do not delete missing files from the index (default is to remove them)"`
+		KeepMissing  bool     `help:"keep missing files in the index"`
 	} `cmd:"" help:"add and update modified files, also checking existing ones (see chkbit update -h)"`
 
 	Init struct {
@@ -328,7 +328,7 @@ func (m *Main) runCmd(command string, cli CLI) int {
 		m.context.UpdateIndex = true
 		m.context.UpdateSkipCheck = cli.Update.SkipExisting
 		m.context.ForceUpdateDmg = cli.Update.Force
-		m.context.NoDelete = cli.Update.NoDelete
+		m.context.KeepMissing = cli.Update.KeepMissing
 		m.log("chkbit update " + strings.Join(pathList, ", "))
 	case cmdShowIgnored:
 		pathList = cli.ShowIgnored.Paths

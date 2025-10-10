@@ -170,7 +170,7 @@ func (i *Index) checkFix(forceUpdateDmg bool) {
 	for name := range i.cur {
 		if _, ok := i.new[name]; !ok {
 			// file missing
-			if i.context.NoDelete {
+			if i.context.KeepMissing {
 				// preserve old entry
 				i.new[name] = i.cur[name]
 			} else {
@@ -190,7 +190,7 @@ func (i *Index) checkFix(forceUpdateDmg bool) {
 	for _, name := range i.curDirList {
 		if !m[name] {
 			// directory missing
-			if i.context.NoDelete {
+			if i.context.KeepMissing {
 				// preserve old directory
 				i.newDirList = append(i.newDirList, name)
 			} else {
