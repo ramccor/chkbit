@@ -169,9 +169,15 @@ func (i *Index) checkFix(forceUpdateDmg bool) {
 	// track deleted files
 	for name := range i.cur {
 		if _, ok := i.new[name]; !ok {
-			i.modified = true
-			if i.context.LogDeleted {
-				i.logFile(StatusDeleted, name)
+			// file missing
+			if i.context.NoDelete {
+				// preserve old entry
+				i.new[name] = i.cur[name]
+			} else {
+				i.modified = true
+				if i.context.LogDeleted {
+					i.logFile(StatusDeleted, name)
+				}
 			}
 		}
 	}
@@ -183,9 +189,15 @@ func (i *Index) checkFix(forceUpdateDmg bool) {
 	}
 	for _, name := range i.curDirList {
 		if !m[name] {
-			i.modified = true
-			if i.context.LogDeleted {
-				i.logDir(StatusDeleted, name+"/")
+			// directory missing
+			if i.context.NoDelete {
+				// preserve old directory
+				i.newDirList = append(i.newDirList, name)
+			} else {
+				i.modified = true
+				if i.context.LogDeleted {
+					i.logDir(StatusDeleted, name+"/")
+				}
 			}
 		}
 	}
