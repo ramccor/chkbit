@@ -15,6 +15,7 @@ type Context struct {
 	UpdateIndex        bool // add and update hashes
 	UpdateSkipCheck    bool // do not check existing hashes when updating
 	ShowIgnoredOnly    bool // print ignored files
+	KeepMissing        bool // keep missing files in index when updating
 	LogDeleted         bool // output deleted files and directories
 	IncludeDot         bool // include dot files
 	ForceUpdateDmg     bool
