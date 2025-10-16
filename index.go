@@ -222,6 +222,25 @@ func (i *Index) calcFile(name string, algo string) (*idxInfo, error) {
 	if err != nil {
 		return nil, err
 	}
+	check_mtime, check_size, err := getMtS(path)
+	if err != nil {
+		return nil, err
+	}
+
+	// Check if mtime before and after hash calculation is matching,
+	// not sure how bad it is going to be from performace point of
+	// view, but this is temporary fix as discused in PR 35 here:
+	// https://github.com/laktak/chkbit/pull/35
+	if check_mtime != mtime && check_size != size {
+		// re-calculate the hash for new check_mtime
+		hash, err = Hashfile(path, algo, i.context.perfMonBytes)
+		if err != nil {
+			return nil, err
+		}
+		mtime = check_mtime
+		size = check_size
+	}
+
 	i.context.perfMonFiles(1)
 	return &idxInfo{
 		ModTime: mtime,
